@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Exercise = require("../models/exercise");
+const Exercise = require("../models");
 
 router.post("/api/workouts", ({ body }, res) => {
     Exercise.create(body)
@@ -21,7 +21,7 @@ router.put("/api/workouts/:id", (req, res) => {
 });
 
 router.get("/api/workouts", (req, res) => {
-    console.log(res);
+    // console.log(res);
     Exercise.find({})
     .then(dbExercise => {
         res.json(dbExercise);
