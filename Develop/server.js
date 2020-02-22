@@ -39,9 +39,10 @@ app.post("/api/workouts", (req, res) => {
     // console.log(req.body);
     // console.log(Exercise);
     const {
+      day = new Date().setDate(new Date().getDate() - 10),
       type, name, weight, sets, reps, duration, distance
     } = req.body;
-    const newExercise = new Exercise({ type, name, weight, sets, reps, duration, distance })
+    const newExercise = new Exercise({ day, type, name, weight, sets, reps, duration, distance })
     newExercise.save(err => {
       if(err) {
         res.status(500).json({
@@ -57,32 +58,64 @@ app.post("/api/workouts", (req, res) => {
     });
 });    
 
-app.put("api/workouts/:id", (req, res) => {
-    Exercise.update(
-     {
-        _id: mongojs.ObjectId(req.params.id)
-     },
-     {
-        $set: {
-          type: req.body.type,
-          name: req.body.name,
-          weight: req.body.weight,
-          sets: req.body.sets,
-          reps: req.body.reps,
-          duration: req.body.duration,
-          distance: req.body.distance
-        }
-      },
-      (error, data) => {
-        if (error) {
-          res.send(error);
-        } else {
-          res.send(data);
-        }
-      }
+// app.get("/:id", (req, res) => {
+//     Exercise.find(
+//       {
+//         _id: mongojs.ObjectId(req.params.id)
+//       }
+//     )
+//     .then(dbExercise => {
+//         res.json(dbExercise);
+//     })
+//     .catch(err => {
+//         res.json(err);
+//     });    
+// })
+
+app.put("api/workouts/:id", ({body, params}, res) => {
+    console.log(params.id);
+    Exercise.findOneAndUpdate(params.id, { $push: { exercises: body}})
+    .then(dbUser => {
+      res.json(dbUser);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+    // Exercise.update(
+    //  {
+    //     _id: mongojs.ObjectId(req.params.id)
+    //  },
+    //  {
+    //     $set: {
+    //       type: req.body.type,
+    //       name: req.body.name,
+    //       weight: req.body.weight,
+    //       sets: req.body.sets,
+    //       reps: req.body.reps,
+    //       duration: req.body.duration,
+    //       distance: req.body.distance
+    //     }
+    //   },
+    //   (error, data) => {
+    //     if (error) {
+    //       res.send(error);
+    //     } else {
+    //       res.send(data);
+    //     }
+    //   }
 
 
-    )
+    // )
+});
+
+app.get("/api/workouts/range", (req, res) =>{
+    Exercise.find({})
+    .then(dbExercise => {
+        res.json(dbExercise);
+    })
+    .catch(err => {
+        res.json(err);
+    });
 });
 
 app.get("/api/workouts", (req, res) => {
