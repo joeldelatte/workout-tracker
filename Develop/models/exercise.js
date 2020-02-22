@@ -1,37 +1,37 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const {Schema} = mongoose;
 // I copied this over to referrence for the syntax...change as needed:
-const ExerciseSchema = new Schema({
+const exerciseSchema = new Schema({
   type: {
     type: String, 
-    required: true
+    required: false
   },
   name: {
     type: String, 
-    required: true
+    required: false
   },
   weight: {
     type: Number, 
-    required: true
+    required: false
   },
   sets: {
     type: Number, 
-    required: true
+    required: false
   },
   reps: {
     type: Number, 
-    required: true
+    required: false
   },
   duration: {
     type: Number, 
-    required: true
+    required: false
   },
   distance: {
     type: Number, 
-    required: true
+    required: false
   }
 });
 // chande the name of the variable after writing proper Schema above
-const Exercise = mongoose.model("Exercise", ExerciseSchema);
+const Exercise = mongoose.model("Exercise", exerciseSchema);
 // name export same as above
 module.exports = Exercise;
