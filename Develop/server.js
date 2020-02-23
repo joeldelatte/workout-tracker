@@ -36,13 +36,11 @@ app.get("/stats", function(req, res) {
 // api routes
 
 app.post("/api/workouts", (req, res) => {
-    // console.log(req.body);
-    // console.log(Exercise);
     const {
       day = new Date().setDate(new Date().getDate() - 10),
-      type, name, weight, sets, reps, duration, distance
+      name, weight, sets, reps, totalDuration, distance
     } = req.body;
-    const newExercise = new Exercise({ day, type, name, weight, sets, reps, duration, distance })
+    const newExercise = new Exercise({ day, name, weight, sets, reps, totalDuration, distance })
     newExercise.save(err => {
       if(err) {
         res.status(500).json({
@@ -58,54 +56,28 @@ app.post("/api/workouts", (req, res) => {
     });
 });    
 
-// app.get("/:id", (req, res) => {
-//     Exercise.find(
-//       {
-//         _id: mongojs.ObjectId(req.params.id)
-//       }
-//     )
-//     .then(dbExercise => {
-//         res.json(dbExercise);
-//     })
-//     .catch(err => {
-//         res.json(err);
-//     });    
-// })
+app.get("/:id", (req, res) => {
+    let query = req.params.id;
+    Exercise.find({
+        'request': query 
+    })
+    .then(dbExercise => {
+        res.json(dbExercise);
+    })
+    .catch(err => {
+        res.json(err);
+    });    
+})
 
-app.put("api/workouts/:id", ({body, params}, res) => {
+app.put("/api/workouts/:id", ({body, params}, res) => {
     console.log(params.id);
     Exercise.findOneAndUpdate(params.id, { $push: { exercises: body}})
-    .then(dbUser => {
-      res.json(dbUser);
+    .then(dbExercise => {
+      res.json(dbExercise);
     })
     .catch(err => {
       res.json(err);
     });
-    // Exercise.update(
-    //  {
-    //     _id: mongojs.ObjectId(req.params.id)
-    //  },
-    //  {
-    //     $set: {
-    //       type: req.body.type,
-    //       name: req.body.name,
-    //       weight: req.body.weight,
-    //       sets: req.body.sets,
-    //       reps: req.body.reps,
-    //       duration: req.body.duration,
-    //       distance: req.body.distance
-    //     }
-    //   },
-    //   (error, data) => {
-    //     if (error) {
-    //       res.send(error);
-    //     } else {
-    //       res.send(data);
-    //     }
-    //   }
-
-
-    // )
 });
 
 app.get("/api/workouts/range", (req, res) =>{
@@ -119,7 +91,6 @@ app.get("/api/workouts/range", (req, res) =>{
 });
 
 app.get("/api/workouts", (req, res) => {
-    // console.log(req);
     Exercise.find({})
     .then(dbExercise => {
         res.json(dbExercise);

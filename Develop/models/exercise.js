@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const {Schema} = mongoose;
-// I copied this over to referrence for the syntax...change as needed:
-const exerciseSchema = new Schema({
+const Schema = mongoose.Schema;
+
+const ExerciseSchema = new Schema({
   day: Date,
   exercises:  [
     {
@@ -16,6 +16,6 @@ const exerciseSchema = new Schema({
   ]
 });
 // chande the name of the variable after writing proper Schema above
-const Exercise = mongoose.model("Exercise", exerciseSchema);
+const Exercise = mongoose.model("Exercise", ExerciseSchema);
 // name export same as above
 module.exports = Exercise;
