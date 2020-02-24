@@ -15,8 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost/workoutsdb", ({useNewUrlParser: true, useFindAndModify: false}));
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workoutsdb", ({useNewUrlParser: true, useFindAndModify: false}));
 
+// mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/your-app-name');
 // write routes here...
 
 // html routes
