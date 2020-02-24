@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workoutsdb", {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost/workoutsdb", ({useNewUrlParser: true, useFindAndModify: false}));
 
 // write routes here...
 
@@ -67,11 +67,11 @@ app.get("/:id", (req, res) => {
     .catch(err => {
         res.json(err);
     });    
-})
+});
 
 app.put("/api/workouts/:id", ({body, params}, res) => {
-    console.log(params.id);
-    Exercise.findOneAndUpdate(params.id, { $push: { exercises: body}})
+
+  Exercise.findByIdAndUpdate(params.id, { $push: { exercises: body}})
     .then(dbExercise => {
       res.json(dbExercise);
     })
